@@ -1,4 +1,4 @@
-// App.tsx - Main React Native App
+// App.tsx - Complete Fixed Version with Your Vercel URL
 import React, { useState } from 'react';
 import {
   View,
@@ -8,7 +8,6 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
-  SafeAreaView,
   Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -34,8 +33,8 @@ interface NutritionResult {
   }>;
 }
 
-// Replace with your actual API URL
-const API_URL = 'https://nutrisnap-web.vercel.app';
+// Your actual Vercel API URL
+const API_URL = 'https://nutrisnap-web.vercel.app/api/analyze';
 
 export default function App() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -43,35 +42,51 @@ export default function App() {
   const [result, setResult] = useState<NutritionResult | null>(null);
 
   const pickImage = async (useCamera: boolean) => {
-    const { status } = useCamera
-      ? await ImagePicker.requestCameraPermissionsAsync()
-      : await ImagePicker.requestMediaLibraryPermissionsAsync();
+    try {
+      console.log('pickImage called, useCamera:', useCamera);
+      
+      // Request permissions
+      const { status } = useCamera
+        ? await ImagePicker.requestCameraPermissionsAsync()
+        : await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    if (status !== 'granted') {
-      alert('Sorry, we need permissions to access your photos!');
-      return;
-    }
+      console.log('Permission status:', status);
 
-    const result = useCamera
-      ? await ImagePicker.launchCameraAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          allowsEditing: true,
-          aspect: [4, 3],
-          quality: 0.8,
-        })
-      : await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          allowsEditing: true,
-          aspect: [4, 3],
-          quality: 0.8,
-        });
+      if (status !== 'granted') {
+        alert('Sorry, we need camera and photo permissions to analyze your food!');
+        return;
+      }
 
-    if (!result.canceled && result.assets[0]) {
-      setSelectedImage(result.assets[0].uri);
-      analyzeImage(result.assets[0].uri);
+      // Launch picker - FIXED: Use array of strings
+      console.log('Launching image picker...');
+      const pickerResult = useCamera
+        ? await ImagePicker.launchCameraAsync({
+            mediaTypes: ['images'],  // ✅ FIXED
+            allowsEditing: true,
+            aspect: [4, 3] as [number, number],
+            quality: 0.8,
+          })
+        : await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],  // ✅ FIXED
+            allowsEditing: true,
+            aspect: [4, 3] as [number, number],
+            quality: 0.8,
+          });
+
+      console.log('Picker result:', pickerResult);
+
+      if (!pickerResult.canceled && pickerResult.assets[0]) {
+        console.log('Image selected:', pickerResult.assets[0].uri);
+        setSelectedImage(pickerResult.assets[0].uri);
+        analyzeImage(pickerResult.assets[0].uri);
+      } else {
+        console.log('Image picker was cancelled');
+      }
+    } catch (error) {
+      console.error('Error picking image:', error);
+      alert('Error selecting image: ' + error);
     }
   };
-
   const analyzeImage = async (imageUri: string) => {
     setAnalyzing(true);
 

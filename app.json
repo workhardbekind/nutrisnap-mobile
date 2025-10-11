@@ -1,30 +1,55 @@
 {
   "expo": {
-    "name": "nutrisnap-mobile",
-    "slug": "nutrisnap-mobile",
+    "name": "NutriSnap",
+    "slug": "nutrisnap",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#667eea"
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.workhardbekind.nutrisnap",
+      "buildNumber": "1.0.0",
+      "infoPlist": {
+        "NSCameraUsageDescription": "NutriSnap needs camera access to analyze your food photos.",
+        "NSPhotoLibraryUsageDescription": "NutriSnap needs photo access to analyze food images."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#667eea"
       },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "package": "com.workhardbekind.nutrisnap",
+      "versionCode": 1,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "NutriSnap needs access to your photos to analyze food images.",
+          "cameraPermission": "NutriSnap needs access to your camera to take photos of food."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "732e319f-44c1-4773-8d8d-67a340124db7"
+      }
     }
   }
 }
