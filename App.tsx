@@ -57,19 +57,19 @@ export default function App() {
         return;
       }
 
-      // Launch picker - FIXED: Use array of strings
+      // Launch picker - FIXED: Use MediaTypeOptions enum
       console.log('Launching image picker...');
       const pickerResult = useCamera
         ? await ImagePicker.launchCameraAsync({
-            mediaTypes: ['images'],  // ✅ FIXED
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,  // ✅ Correct syntax
             allowsEditing: true,
-            aspect: [4, 3] as [number, number],
+            aspect: [4, 3],
             quality: 0.8,
           })
         : await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ['images'],  // ✅ FIXED
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,  // ✅ Correct syntax
             allowsEditing: true,
-            aspect: [4, 3] as [number, number],
+            aspect: [4, 3],
             quality: 0.8,
           });
 
